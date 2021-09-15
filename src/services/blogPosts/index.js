@@ -37,9 +37,9 @@ blogRouter.get("/", (req, res, next) => {
 blogRouter.get("/:id", (req, res, next) =>{
  try{
   const blogs = getBlogPosts()
-  const blog = blogs.find(bl => bl.id === bl.req.params.id)
+  const blog = blogs.find(bl => bl.id === req.params.id)
   if(blog){
-    res.send(blog).status(204)
+    res.send(blog)
   } else {
     next(createHttpError(404, `Book with ID ${req.params.id} not found!`)) // we want to trigger 404 error handler
   }
@@ -95,7 +95,7 @@ blogRouter.put("/:id", (req, res, next) => {
 blogRouter.delete("/:id", (req, res, next) => {
   try{
   const blogs = getBlogPosts()
-  const filteredBlogs = blogs.filter(bl.id !== req.params.id)
+  const filteredBlogs = blogs.filter(bl => bl.id !== req.params.id)
   writeBlogPosts(filteredBlogs)
   res.status(204).send()
   }catch(error){
