@@ -3,6 +3,7 @@ import listEndpoints from "express-list-endpoints"
 import cors from "cors"
 
 import authorsRouter from "./services/authors/index.js"
+import blogRouter from "./services/blogPosts/index.js"
 
 const server = express()
 const port = 3001
@@ -13,6 +14,7 @@ server.use(express.json())    // If I do not specify this line BEFORE the routes
 // --Endpoints--
 
 server.use("/authors", authorsRouter)
+server.use("/blogPosts", blogRouter)
 
 console.table(listEndpoints(server))
 
