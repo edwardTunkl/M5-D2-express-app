@@ -41,7 +41,7 @@ blogRouter.get("/:id", (req, res, next) =>{
   if(blog){
     res.send(blog)
   } else {
-    next(createHttpError(404, `Book with ID ${req.params.id} not found!`)) // we want to trigger 404 error handler
+    next(createHttpError(404, `Blog with ID ${req.params.id} not found!`)) // we want to trigger 404 error handler
   }
  }catch(error){
    next(error)
