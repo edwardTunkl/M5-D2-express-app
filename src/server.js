@@ -9,6 +9,8 @@ import blogRouter from "./services/blogPosts/index.js"
 const server = express()
 const port = 3001
 
+//---Global Middlewares---
+
 server.use(cors())    // Add this to make your FE be able to communicate with BE
 server.use(express.json())    // If I do not specify this line BEFORE the routes, all the requests' bodies will be UNDEFINED
 
