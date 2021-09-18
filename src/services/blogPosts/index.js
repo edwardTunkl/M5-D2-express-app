@@ -3,6 +3,8 @@ import uniqid from "uniqid";
 import createHttpError from "http-errors";
 
 import { getBlogPosts, writeBlogPosts } from "../../library/fs-tools.js";
+import { blogPostsValidation } from "./validation.js";
+import { validationResult } from "express-validator";
 
 const blogRouter = express.Router();
 
@@ -40,34 +42,40 @@ blogRouter.get("/:id", async (req, res, next) => {
 
 //---POST---
 
-blogRouter.post("/", async (req, res, next) => {
-  try {
-    const {
-      category,
-      title,
-      cover,
-      readTime = { value: 2, unit: "minute" },
-      author = { name: "", avatar: "" },
-      content,
-    } = req.body;
+blogRouter.post("/", blogPostsValidation, async (req, res, next) => {
+  const errorList = validationResult(req);
 
-    const newBlogPost = {
-      id: uniqid(),
-      category,
-      title,
-      cover,
-      readTime,
-      author,
-      content,
-      createdAt: new Date(),
-    };
+  if (!errorList.isEmpty) {
+    next(createHttpError(400, { errorList }));
+  } else {
+    try {
+      const {
+        category,
+        title,
+        cover,
+        readTime = { value: 2, unit: "minute" },
+        author = { name: "", avatar: "" },
+        content,
+      } = req.body;
 
-    const blogs = await getBlogPosts();
-    blogs.push(newBlogPost);
-    await writeBlogPosts(blogs);
-    res.status(201).send({ id: newBlogPost.id });
-  } catch (error) {
-    next(error);
+      const newBlogPost = {
+        id: uniqid(),
+        category,
+        title,
+        cover,
+        readTime,
+        author,
+        content,
+        createdAt: new Date(),
+      };
+
+      const blogs = await getBlogPosts();
+      blogs.push(newBlogPost);
+      await writeBlogPosts(blogs);
+      res.status(201).send({ id: newBlogPost.id });
+    } catch (error) {
+      next(error);
+    }
   }
 });
 
