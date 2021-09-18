@@ -47,7 +47,7 @@ blogRouter.post("/", async (req, res, next) => {
       title,
       cover,
       readTime = { value: 2, unit: "minute" },
-      author = { name: "AUTHOR AVATAR NAME", avatar: "AUTHOR AVATAR LINK" },
+      author = { name: "", avatar: "" },
       content,
     } = req.body;
 

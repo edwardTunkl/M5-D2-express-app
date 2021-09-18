@@ -3,7 +3,8 @@ import uniqid from "uniqid";
 import createHttpError from "http-errors";
 
 import { getAuthors, writeAuthors } from "../../library/fs-tools.js";
-
+import { authorValidation } from "./validation.js";
+import { validationResult } from "express-validator";
 const authorsRouter = express.Router();
 
 //---GET---
@@ -36,29 +37,33 @@ authorsRouter.get("/:id", async (req, res, next) => {
 
 //---POST---
 
-authorsRouter.post("/", async (req, res, next) => {
-  try {
-    // console.log("REQUESTBODY: ", req.body);
-    const { name, surname, email, dateOfBirth } = req.body;
+authorsRouter.post("/", authorValidation, async (req, res, next) => {
+  const errorsList = validationResult(req);
+  if (!errorsList.isEmpty) {
+    next(createHttpError(400, { errorsList }));
+  } else {
+    try {
+      const { name, surname, email, dateOfBirth } = req.body;
 
-    const newAuthor = {
-      id: uniqid(),
-      name,
-      surname,
-      email,
-      dateOfBirth,
-      avatar: `https://ui-avatars.com/api/?name=${name}+${surname}`,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+      const newAuthor = {
+        id: uniqid(),
+        name,
+        surname,
+        email,
+        dateOfBirth,
+        avatar: `https://ui-avatars.com/api/?name=${name}+${surname}`,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
 
-    console.log(newAuthor);
-    const authors = await getAuthors();
-    authors.push(newAuthor);
-    await writeAuthors(authors);
-    res.status(201).send({ id: newAuthor.id });
-  } catch (error) {
-    next(error);
+      console.log(newAuthor);
+      const authors = await getAuthors();
+      authors.push(newAuthor);
+      await writeAuthors(authors);
+      res.status(201).send({ id: newAuthor.id });
+    } catch (error) {
+      next(error);
+    }
   }
 });
 
@@ -78,10 +83,10 @@ authorsRouter.put("/:id", async (req, res, next) => {
 
     remainingAuthors.push(updatedAuthor);
 
-   await writeAuthors(authors)
+    await writeAuthors(authors);
     res.send(updatedAuthor);
   } catch (error) {
-    next(error)
+    next(error);
   }
 });
 
@@ -89,16 +94,15 @@ authorsRouter.put("/:id", async (req, res, next) => {
 
 authorsRouter.delete("/:id", async (req, res, next) => {
   try {
-    const authors = await getAuthors()
+    const authors = await getAuthors();
     const remainingAuthors = authors.filter(
       (auth) => auth.id !== req.params.id
     );
-   await writeAuthors(remainingAuthors)
+    await writeAuthors(remainingAuthors);
     res.status(204).send();
   } catch (error) {
-   next(error)
+    next(error);
   }
 });
-
 
 export default authorsRouter;
