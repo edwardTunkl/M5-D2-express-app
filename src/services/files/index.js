@@ -2,7 +2,7 @@ import express from "express";
 import multer from "multer";
 import createHttpError from "http-errors";
 
-import { getBlogPosts, writeBlogPosts, blogPostPicture, getAuthors, writeAuthors, authorPicture } from "../../library/fs-tools.js";
+import { getBlogPosts, writeBlogPosts, getAuthors, writeAuthors } from "../../library/fs-tools.js";
 
 const filesRouter = express.Router();
 

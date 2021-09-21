@@ -1,8 +1,8 @@
 import express from "express";
 import uniqid from "uniqid";
 import createHttpError from "http-errors";
-
-import { getAuthors, writeAuthors } from "../../library/fs-tools.js";
+import multer from "multer";
+import { getAuthors, writeAuthors, uploadAuthorPicture } from "../../library/fs-tools.js";
 import { authorValidation } from "./validation.js";
 import { validationResult } from "express-validator";
 const authorsRouter = express.Router();
@@ -77,6 +77,30 @@ authorsRouter.put("/:id", async (req, res, next) => {
     );
     const updatedAuthor = {
       ...req.body,
+      updatedAt: new Date(),
+      id: req.params.id,
+    };
+
+    remainingAuthors.push(updatedAuthor);
+
+    await writeAuthors(authors);
+    res.send(updatedAuthor);
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+//---PUT with avatar---      multer().single('avatar') -> parsing file and attaching to request
+
+authorsRouter.put("/:id/avatar", multer().single('avatar'), uploadAuthorPicture, async (req, res, next) => {
+  try {
+    const authors = await getAuthors();
+    const remainingAuthors = authors.filter(
+      (auth) => auth.id !== req.params.id
+    );
+    const updatedAuthor = {
+      avatar: req.file,
       updatedAt: new Date(),
       id: req.params.id,
     };
