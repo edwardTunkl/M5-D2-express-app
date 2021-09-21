@@ -9,13 +9,30 @@ import blogRouter from "./services/blogPosts/index.js"
 import filesRouter from "./services/files/index.js"
 
 const server = express()
-const port = 3001
+const port = process.env.PORT || 3001
+
+const whiteList = [process.env.FE_DEV_URL, process.env.FE_PROD_URL]
+
+const corsOpts = {
+  origin: function (origin, next) {
+    console.log("THIS IS CURRENT ORIGIN", origin )
+
+    if(!origin|| whiteList.indexOf(origin) !== -1){
+      // request is allowed if recieved origin is in the whiteList
+      next(null, true) 
+    } else {
+      // if not request gets rejected
+      next(new Error(`THIS ORIGIN ${origin} IS NOT ALLOWED`))
+    }
+}}
+
+
 
 const publicFolderPath = join(process.cwd(), "public")
 
 //---Global Middlewares---
 
-server.use(cors())    // Add this to make your FE be able to communicate with BE
+server.use(cors(corsOpts))    // Add this to make your FE be able to communicate with BE
 server.use(express.json())    // If I do not specify this line BEFORE the routes, all the requests' bodies will be UNDEFINED
 //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 server.use(express.static(publicFolderPath)) // Need to further specify the proper /img/blogPost--OR--authors

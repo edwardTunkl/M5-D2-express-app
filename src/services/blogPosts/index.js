@@ -112,7 +112,7 @@ blogRouter.put(
       const previousblogData = blogs[blogIndex]
       const changedBlog = {
         ...previousblogData,
-        test:"HELLO",                 //--> made change here
+        test:"HELLO CAN YOU READ ME",                 //--> made change here
         cover: req.file, //added .path
         updatedAt: new Date(),
         id: req.params.id,
