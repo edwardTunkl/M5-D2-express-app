@@ -69,7 +69,7 @@ export const cloudUploadBlogCover = (req, res, next) => {
     const extension = extname(originalname)
     const fileName = `${req.params.id}${extension}`
     fs.writeFileSync(pathToFile, buffer)
-    const link = `${process.env.FE_PROD_URL}/${fileName}`
+    const link = `https://strive-blog-mu.vercel.app/${fileName}`
     req.file = link                                         // => req.file will be link after upload
     // console.log(req.file)
     // console.log(publicFolderAuthorsPath)
