@@ -25,7 +25,7 @@ export const writeAuthors = content => writeJSON(authorsJSONPath, content)
 // export const blogPostPicture = (name, contentAsBuffer) => writeFile(join(publicFolderBlogPostPath, name), contentAsBuffer)
 // export const authorPicture = (name, contentAsBuffer) => writeFile(join(publicFolderAuthorsPath, name), contentAsBuffer)
 
-/*  export const uploadAuthorPicture = (req, res, next) => {
+  export const uploadAuthorPicture = (req, res, next) => {
     try {
       const {originalname, buffer} = req.file                 // => de-constructure this object
       const extension = extname(originalname)
@@ -41,7 +41,7 @@ export const writeAuthors = content => writeJSON(authorsJSONPath, content)
       next(error)
     }
   }
-*/
+
 //---Upload BlogCover in localhost---
 
 export const uploadBlogCover = (req, res, next) => {
@@ -63,7 +63,7 @@ export const uploadBlogCover = (req, res, next) => {
 
 //--- Upload BlogCover in Cloud---
 
-/*export const cloudUploadBlogCover = (req, res, next) => {
+export const cloudUploadBlogCover = (req, res, next) => {
   try {
     const {originalname, buffer} = req.file                 // => de-constructure this object
     const extension = extname(originalname)
@@ -78,7 +78,7 @@ export const uploadBlogCover = (req, res, next) => {
     next(error)
   }
 }
-*/
+
 //---Function to create ReadStream from blogPost.json ---
 
 const getBlogPostsReadableStream = () => fs.createReadStream(blogPostsJSONPath)
