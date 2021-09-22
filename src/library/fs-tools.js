@@ -63,7 +63,7 @@ export const uploadBlogCover = (req, res, next) => {
 
 //--- Upload BlogCover in Cloud---
 
-export const cloudUploadBlogCover = (req, res, next) => {
+/*export const cloudUploadBlogCover = (req, res, next) => {
   try {
     const {originalname, buffer} = req.file                 // => de-constructure this object
     const extension = extname(originalname)
@@ -78,7 +78,7 @@ export const cloudUploadBlogCover = (req, res, next) => {
     next(error)
   }
 }
-
+*/
 //---Function to create ReadStream from blogPost.json ---
 
 const getBlogPostsReadableStream = () => fs.createReadStream(blogPostsJSONPath)
