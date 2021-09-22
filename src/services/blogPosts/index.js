@@ -95,7 +95,40 @@ blogRouter.put("/:id", async (req, res, next) => {
   }
 });
 
-//---PUT with cover---
+//---PUT with cover stored in localhost:3001---
+
+/* blogRouter.put(
+  "/:id/cover",
+  multer().single("cover"),
+  uploadBlogCover,
+  async (req, res, next) => {
+    try {
+      const blogs = await getBlogPosts();
+      const blogIndex = blogs.findIndex(bl => bl.id === req.params.id)
+      if (!blogIndex == -1) {
+        res
+          .status(404)
+          .send({ message: `blog with ${req.params.id} is not found!` });
+      }
+      const previousblogData = blogs[blogIndex]
+      const changedBlog = {
+        ...previousblogData,
+        test:"HELLO CAN YOU READ ME",                 //--> made change here
+        cover: req.file, //added .path
+        updatedAt: new Date(),
+        id: req.params.id,
+      };
+      blogs[blogIndex] = changedBlog
+     
+      await writeBlogPosts(blogs);   
+      res.status(200).send(changedBlog)         // changed writeBlogPosts(blogs) -->
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+*/
+//---PUT with cover stored in Cloud---
 
 blogRouter.put(
   "/:id/cover",
