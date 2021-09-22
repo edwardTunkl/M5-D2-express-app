@@ -6,6 +6,7 @@ import {
   getBlogPosts,
   writeBlogPosts,
   uploadBlogCover,
+  cloudUploadBlogCover
 } from "../../library/fs-tools.js";
 import {
   checkBlogPostSchema,
@@ -135,7 +136,7 @@ blogRouter.put("/:id", async (req, res, next) => {
 blogRouter.put(
   "/:id/cover",
   multer({storage: CloudinaryStorage}).single("cover"),
-  // uploadBlogCover,
+  cloudUploadBlogCover,
   async (req, res, next) => {
     try {
       const blogs = await getBlogPosts();

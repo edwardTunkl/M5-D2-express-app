@@ -25,22 +25,25 @@ export const writeAuthors = content => writeJSON(authorsJSONPath, content)
 // export const blogPostPicture = (name, contentAsBuffer) => writeFile(join(publicFolderBlogPostPath, name), contentAsBuffer)
 // export const authorPicture = (name, contentAsBuffer) => writeFile(join(publicFolderAuthorsPath, name), contentAsBuffer)
 
-export const uploadAuthorPicture = (req, res, next) => {
-  try {
-    const {originalname, buffer} = req.file                 // => de-constructure this object
-    const extension = extname(originalname)
-    const fileName = `${req.params.id}${extension}`
-    const pathToFile = path.join(publicFolderAuthorsPath, fileName) 
-    fs.writeFileSync(pathToFile, buffer)
-    const link = `http://localhost:3001/${fileName}`
-    req.file = link                                         // => req.file will be link after upload
-    // console.log(req.file)
-    // console.log(publicFolderAuthorsPath)
-    next()                                                  // => next function can request to access file
-  } catch (error) {
-    next(error)
+/*  export const uploadAuthorPicture = (req, res, next) => {
+    try {
+      const {originalname, buffer} = req.file                 // => de-constructure this object
+      const extension = extname(originalname)
+      const fileName = `${req.params.id}${extension}`
+      const pathToFile = path.join(publicFolderAuthorsPath, fileName) 
+      fs.writeFileSync(pathToFile, buffer)
+      const link = `http://localhost:3001/${fileName}`
+      req.file = link                                         // => req.file will be link after upload
+      // console.log(req.file)
+      // console.log(publicFolderAuthorsPath)
+      next()                                                  // => next function can request to access file
+    } catch (error) {
+      next(error)
+    }
   }
-}
+*/
+//---Upload BlogCover in localhost---
+
 export const uploadBlogCover = (req, res, next) => {
   try {
     const {originalname, buffer} = req.file                 // => de-constructure this object
@@ -57,3 +60,25 @@ export const uploadBlogCover = (req, res, next) => {
     next(error)
   }
 }
+
+//--- Upload BlogCover in Cloud---
+
+export const cloudUploadBlogCover = (req, res, next) => {
+  try {
+    const {originalname, buffer} = req.file                 // => de-constructure this object
+    const extension = extname(originalname)
+    const fileName = `${req.params.id}${extension}`
+    fs.writeFileSync(pathToFile, buffer)
+    const link = `${process.env.FE_PROD_URL}/${fileName}`
+    req.file = link                                         // => req.file will be link after upload
+    // console.log(req.file)
+    // console.log(publicFolderAuthorsPath)
+    next()                                                  // => next function can request to access file
+  } catch (error) {
+    next(error)
+  }
+}
+
+//---Function to create ReadStream from blogPost.json ---
+
+const getBlogPostsReadableStream = () => fs.createReadStream(blogPostsJSONPath)
