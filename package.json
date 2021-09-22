@@ -26,6 +26,5 @@
     "uniqid": "^5.4.0"
   },
   "devDependencies": {},
-  "dotenv": "^10.0.0",
   "description": ""
 }
