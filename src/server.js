@@ -11,13 +11,13 @@ import filesRouter from "./services/files/index.js"
 const server = express()
 const port = process.env.PORT || 3001
 
-const whitelist = [process.env.FE_DEV_URL, process.env.FE_PROD_URL, "https://strive-blog-mu.vercel.app"]
+const whiteList = [process.env.FE_DEV_URL, process.env.FE_PROD_URL, "https://strive-blog-mu.vercel.app"]
 
 const corsOpts = {
   origin: function (origin, next) {
     console.log("THIS IS CURRENT ORIGIN: ", origin)
 
-    if(!origin|| whitelist.indexOf(origin) !== -1){
+    if(!origin|| whiteList.indexOf(origin) !== -1){
       // request is allowed if recieved origin is in the whiteList
       next(null, true) 
     } else {
