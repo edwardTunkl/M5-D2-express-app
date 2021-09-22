@@ -13,7 +13,8 @@ import {
   checkSearchSchema,
   checkValidationResult,
 } from "./validation.js";
-
+import { v2 as cloudinary } from "cloudinary"
+import { CloudinaryStorage } from "multer-storage-cloudinary"
 
 const blogRouter = express.Router();
 
@@ -98,8 +99,8 @@ blogRouter.put("/:id", async (req, res, next) => {
 
 blogRouter.put(
   "/:id/cover",
-  multer().single("cover"),
-  uploadBlogCover,
+  multer({storage: CloudinaryStorage}).single("cover"),
+  // uploadBlogCover,
   async (req, res, next) => {
     try {
       const blogs = await getBlogPosts();
