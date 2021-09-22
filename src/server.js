@@ -12,10 +12,11 @@ const server = express()
 const port = process.env.PORT || 3001
 
 const whiteList = [process.env.FE_DEV_URL, process.env.FE_PROD_URL, "https://strive-blog-mu.vercel.app"]
-
+console.log("This is whitelist: ", whiteList)
+// console.log(process.env)
 const corsOpts = {
   origin: function (origin, next) {
-    console.log("THIS IS CURRENT ORIGIN: ", origin)
+    console.log("THIS IS THE CURRENT ORIGIN: ", origin)
 
     if(!origin|| whiteList.indexOf(origin) !== -1){
       // request is allowed if recieved origin is in the whiteList
