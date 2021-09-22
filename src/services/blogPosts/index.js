@@ -6,7 +6,7 @@ import {
   getBlogPosts,
   writeBlogPosts,
   uploadBlogCover,
-  cloudUploadBlogCover
+  parseFile
 } from "../../library/fs-tools.js";
 import {
   checkBlogPostSchema,
@@ -135,8 +135,7 @@ blogRouter.put("/:id", async (req, res, next) => {
 
 blogRouter.put(
   "/:id/cover",
-  multer({storage: CloudinaryStorage}).single("cover"),
-  cloudUploadBlogCover,
+  parseFile.single("cover"),    //  parseFile === multer({storage})
   async (req, res, next) => {
     try {
       const blogs = await getBlogPosts();
@@ -150,7 +149,7 @@ blogRouter.put(
       const changedBlog = {
         ...previousblogData,
         test:"HELLO CAN YOU READ ME",                 //--> made change here
-        cover: req.file,                     //--> trying to link to storage.path       res.json(req.file)  ???
+        cover: req.file.path,                     //--> trying to link to storage.path       res.json(req.file)  ???
         updatedAt: new Date(),
         id: req.params.id,
       };
@@ -176,7 +175,6 @@ blogRouter.delete("/:id", async (req, res, next) => {
     next(error);
   }
 });
-export default blogRouter;
 
 //-------COMMENTS------------------------------------------
 
@@ -194,7 +192,7 @@ async (req, res, next) => {
     const specificBlogPost = blogs.filter((bl) => bl.id === req.params.id)
     console.log("SPECIFIC",specificBlogPost.comments)
     specificBlogPost.comments = specificBlogPost.comments || []
-
+    
     
     const updatedBlogPost = {
       ...req.body,
@@ -220,7 +218,7 @@ blogRouter.get("/:id/comments", async (req, res, next) => {
     if (blog) {
       blog.comments = blog.comments || []
       res.send(blog.comments);
-
+      
     } else {
       next(createHttpError(404, `Blog with ID ${req.params.id} not found!`)); // we want to trigger 404 error handler
     }
@@ -228,3 +226,8 @@ blogRouter.get("/:id/comments", async (req, res, next) => {
     next(error);
   }
 });
+
+//---download blog-content as PDF---
+
+
+export default blogRouter;

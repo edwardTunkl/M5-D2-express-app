@@ -1,17 +1,17 @@
 import fs from 'fs-extra'
 import path, {join, dirname, extname} from 'path'
 import { fileURLToPath } from 'url'
-const { readJSON, writeJSON, writeFile } = fs
+import multer from 'multer'
+import {v2 as cloudinary} from 'cloudinary'
+import { CloudinaryStorage } from 'multer-storage-cloudinary'
 
+
+
+const { readJSON, writeJSON, writeFile } = fs
 const dataFolderPath = join(dirname(fileURLToPath(import.meta.url)), "../data")
 
 const blogPostsJSONPath = join(dataFolderPath, "blogPosts.json")
 const authorsJSONPath = join(dataFolderPath, "authors.json")
-
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = dirname(__filename);
-// const publicFolderBlogPostPath = path.join(__dirname, "../../../public/img/blogPosts");
-
 
 const publicFolderBlogPostPath = join(process.cwd(), "./public")
 const publicFolderAuthorsPath = join(process.cwd(), "./public/img/authors")
@@ -63,21 +63,17 @@ export const uploadBlogCover = (req, res, next) => {
 
 //--- Upload BlogCover in Cloud---
 
-export const cloudUploadBlogCover = (req, res, next) => {
-  try {
-    const {originalname, buffer} = req.file                 // => de-constructure this object
-    const extension = extname(originalname)
-    const fileName = `${req.params.id}${extension}`
-    fs.writeFileSync(pathToFile, buffer)
-    const link = `https://strive-blog-mu.vercel.app/${fileName}`
-    req.file = link                                         // => req.file will be link after upload
-    // console.log(req.file)
-    // console.log(publicFolderAuthorsPath)
-    next()                                                  // => next function can request to access file
-  } catch (error) {
-    next(error)
-  }
-}
+const {CLOUDINARY_NAME, CLOUDINARY_KEY, CLOUDINARY_SECRET} = process.env
+
+cloudinary.config({
+  cloud_name: CLOUDINARY_NAME,
+  api_key: CLOUDINARY_KEY,
+  api_secret: CLOUDINARY_SECRET,
+});
+
+const storage = new CloudinaryStorage({cloudinary: cloudinary})
+export const parseFile = multer({storage})
+
 
 //---Function to create ReadStream from blogPost.json ---
 
