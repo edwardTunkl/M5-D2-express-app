@@ -24,6 +24,7 @@ export const writeAuthors = content => writeJSON(authorsJSONPath, content)
 
 // export const blogPostPicture = (name, contentAsBuffer) => writeFile(join(publicFolderBlogPostPath, name), contentAsBuffer)
 // export const authorPicture = (name, contentAsBuffer) => writeFile(join(publicFolderAuthorsPath, name), contentAsBuffer)
+const apiUrl = process.env.FE_PROD_URL
 
 export const uploadAuthorPicture = (req, res, next) => {
   try {
@@ -32,7 +33,7 @@ export const uploadAuthorPicture = (req, res, next) => {
     const fileName = `${req.params.id}${extension}`
     const pathToFile = path.join(publicFolderAuthorsPath, fileName) 
     fs.writeFileSync(pathToFile, buffer)
-    const link = `http://localhost:3001/public/img/blogPosts${fileName}`
+    const link = `${apiUrl}/${fileName}`
     req.file = link                                         // => req.file will be link after upload
     // console.log(req.file)
     // console.log(publicFolderAuthorsPath)
