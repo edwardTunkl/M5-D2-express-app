@@ -130,6 +130,8 @@ blogRouter.put("/:id", async (req, res, next) => {
 */
 //---PUT with cover stored in Cloud---
 
+//NOT READY YET
+
 blogRouter.put(
   "/:id/cover",
   multer({storage: CloudinaryStorage}).single("cover"),
@@ -147,7 +149,7 @@ blogRouter.put(
       const changedBlog = {
         ...previousblogData,
         test:"HELLO CAN YOU READ ME",                 //--> made change here
-        cover: req.file, //added .path
+        cover: req.file,                     //--> trying to link to storage.path       res.json(req.file)  ???
         updatedAt: new Date(),
         id: req.params.id,
       };
