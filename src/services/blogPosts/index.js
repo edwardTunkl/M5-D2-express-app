@@ -74,6 +74,20 @@ blogRouter.post(
     }
 );
 
+//---Post to send an email to blog author---
+
+
+blogRouter.post("/email-response", async(req, res, next) =>{
+  try{
+    const {email} = req.body
+
+    await sendEmail(email)
+    res.send("Email is on the way!!!")
+  }catch(error){
+    next(error)
+  }
+})
+
 //---PUT---
 
 blogRouter.put("/:id", async (req, res, next) => {
