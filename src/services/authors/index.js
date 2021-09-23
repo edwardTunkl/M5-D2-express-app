@@ -2,9 +2,13 @@ import express from "express";
 import uniqid from "uniqid";
 import createHttpError from "http-errors";
 import multer from "multer";
-import { getAuthors, writeAuthors, uploadAuthorPicture } from "../../library/fs-tools.js";
+import { getAuthors, writeAuthors, uploadAuthorPicture, getAuthorsReadableStream } from "../../library/fs-tools.js";
 import { authorValidation } from "./validation.js";
 import { validationResult } from "express-validator";
+
+import { pipeline } from "stream";
+import { json2csv } from "json2csv";
+
 const authorsRouter = express.Router();
 
 //---GET---
@@ -17,6 +21,28 @@ authorsRouter.get("/", async (req, res, next) => {
     next(error);
   }
 });
+
+//---Get authors as CSV---
+
+authorsRouter.get("/CSVDownload", async(req, res, next) =>{
+  try{
+    res.setHeader("Content-Disposition", `attachment; filename=listOfAuthors.csv`)
+
+    const source = getAuthorsReadableStream()
+    const transform = new json2csv.Transform({ fields: ["name", "surname", "email", "dateOfBirth", "createdAt"]}) 
+    const destination = res
+
+    pipeline(source, transform, destination, error => {
+      if(error){
+        next(error)
+      }
+    })
+
+  }catch(error){
+    console.log(error)
+    next(error)
+  }
+})
 
 //---GET:id---
 

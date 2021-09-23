@@ -1,7 +1,6 @@
 import express from "express";
 import uniqid from "uniqid";
 import createHttpError from "http-errors";
-import multer from "multer";
 import {
   getBlogPosts,
   writeBlogPosts,
@@ -14,8 +13,6 @@ import {
   checkSearchSchema,
   checkValidationResult,
 } from "./validation.js";
-import { v2 as cloudinary } from "cloudinary"
-import { CloudinaryStorage } from "multer-storage-cloudinary"
 
 const blogRouter = express.Router();
 
@@ -131,7 +128,6 @@ blogRouter.put("/:id", async (req, res, next) => {
 */
 //---PUT with cover stored in Cloud---
 
-//NOT READY YET
 
 blogRouter.put(
   "/:id/cover",
