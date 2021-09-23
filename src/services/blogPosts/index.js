@@ -55,8 +55,9 @@ blogRouter.post(
   checkBlogPostSchema,
   checkValidationResult,
   async (req, res, next) => {
-    // deleted const {} = req.body
-      try {
+    try {
+        const {author} = req.body
+        
         const newBlogPost = {
           id: uniqid(),
           ...req.body,
@@ -68,25 +69,13 @@ blogRouter.post(
         blogs.push(newBlogPost);
         await writeBlogPosts(blogs);
         res.status(201).send({ id: newBlogPost.id }); //changed send; before .send(newBlogPost)
+        await sendEmail({to:author.email})
       } catch (error) {
         next(error);
       }
     }
 );
 
-//---Post to send an email to blog author---
-
-
-blogRouter.post("/email-response", async(req, res, next) =>{
-  try{
-    const {email} = req.body
-
-    await sendEmail(email)
-    res.send("Your email is on the way!!!")
-  }catch(error){
-    next(error)
-  }
-})
 
 //---PUT---
 

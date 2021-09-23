@@ -89,13 +89,18 @@ const getBlogPostsReadableStream = () => fs.createReadStream(blogPostsJSONPath)
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
-export const sendEmail = async (recipientAddress) => {
-  const msg = {
-    to: recipientAddress,
-    from: "eddytunkl@gmail.com",
-    subject: "Thank you for your lovely blog post :)",
-    text: "just a quick test",
-    html: "<strong>Hello</strong>"
+export const sendEmail = async ({to}) => {
+  try{
+    const msg = {
+      to,
+      from: "eddytunkl@gmail.com",
+      subject: "Thank you for your lovely blog post :)",
+      text: "just a quick test",
+      html: "<strong>Hello</strong>"
+    }
+    await sgMail.send(msg)
+
+  }catch(error){
+    console.log(error)
   }
-  await sgMail.send(msg)
 }

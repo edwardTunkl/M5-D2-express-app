@@ -11,7 +11,7 @@ import filesRouter from "./services/files/index.js"
 const server = express()
 const port = process.env.PORT || 3001
 
-const whiteList = [process.env.FE_DEV_URL, process.env.FE_PROD_URL]
+const whiteList = [process.env.FE_PROD_URL, process.env.FE_DEV_URL]
 console.log("This is whitelist: ", whiteList)
 
 const apiUrl = process.env.FE_PROD_URL
