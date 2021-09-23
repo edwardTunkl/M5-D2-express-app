@@ -6,7 +6,7 @@ import {v2 as cloudinary} from 'cloudinary'
 import { CloudinaryStorage } from 'multer-storage-cloudinary'
 
 import sgMail from "@sendgrid/mail"
-import { getMaxListeners } from 'process'
+
 
 
 const { readJSON, writeJSON, writeFile } = fs
@@ -95,7 +95,7 @@ export const sendEmail = async (recipientAddress) => {
     from: "eddytunkl@gmail.com",
     subject: "Thank you for your lovely blog post :)",
     text: "just a quick test",
-    html: <strong>Hello</strong>
+    html: "<strong>Hello</strong>"
   }
   await sgMail.send(msg)
 }
