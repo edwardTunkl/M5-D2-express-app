@@ -82,7 +82,7 @@ blogRouter.post("/email-response", async(req, res, next) =>{
     const {email} = req.body
 
     await sendEmail(email)
-    res.send("Email is on the way!!!")
+    res.send("Your email is on the way!!!")
   }catch(error){
     next(error)
   }
