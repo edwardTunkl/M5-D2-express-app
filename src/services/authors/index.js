@@ -7,7 +7,7 @@ import { authorValidation } from "./validation.js";
 import { validationResult } from "express-validator";
 
 import { pipeline } from "stream";
-import { json2csv } from "json2csv";
+import  json2csv  from "json2csv";
 
 const authorsRouter = express.Router();
 
