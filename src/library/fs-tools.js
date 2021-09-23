@@ -5,6 +5,8 @@ import multer from 'multer'
 import {v2 as cloudinary} from 'cloudinary'
 import { CloudinaryStorage } from 'multer-storage-cloudinary'
 
+import sgMail from "@sendgrid/mail"
+import { getMaxListeners } from 'process'
 
 
 const { readJSON, writeJSON, writeFile } = fs
@@ -81,3 +83,19 @@ export const parseFile = multer({storage})
 //---Function to create ReadStream from blogPost.json ---
 
 const getBlogPostsReadableStream = () => fs.createReadStream(blogPostsJSONPath)
+
+
+//---Function to send emails---
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+
+export const sendEmail = async (recipientAddress) => {
+  const msg = {
+    to: recipientAddress,
+    from: "eddytunkl@gmail.com",
+    subject: "Thank you for your lovely blog post :)",
+    text: "just a quick test",
+    html: <strong>Hello</strong>
+  }
+  await sgMail.send(msg)
+}
